@@ -20,7 +20,7 @@ const Router = () => (
       component={BookDetailScreen}
       options={{
         title: 'Book Information',
-        headerShown: true,
+        headerShown: false,
       }}
     />
   </RootStack.Navigator>

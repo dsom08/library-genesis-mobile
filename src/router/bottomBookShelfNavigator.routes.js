@@ -1,8 +1,6 @@
 import React from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-
-import Feather from 'react-native-vector-icons/Feather';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { BottomNavigation, BottomNavigationTab, Icon } from '@ui-kitten/components';
 
 import SearchScreen from '../screens/SearchScreen';
 import ScannerScreen from '../screens/ScannerScreen';
@@ -10,40 +8,35 @@ import BookShelfScreen from '../screens/BookShelfScreen';
 
 const Tab = createBottomTabNavigator();
 
-const bottomBookShelfNavigator = () => (
-  <Tab.Navigator
-    screenOptions={({ route }) => ({
-      tabBarIcon: ({ focused, color, size }) => {
-        
-        if (route.name === 'Search') {
-          return <Feather name="search" size={size} color={color} />
-        }
-        if (route.name === 'Scanner') {
-          return <MaterialCommunityIcons name="barcode-scan" size={size} color={color} />
-        }
-        if (route.name === 'BookShelf') {
-          return <MaterialCommunityIcons name="bookshelf" size={size} color={color} />
-        }
+const SearchIcon = (props) => (
+  <Icon {...props} name='search-outline' />
+);
 
-      },
-    })}
-    sceneContainerStyle={{ backgroundColor: '#e4e4e4' }}
-    tabBarOptions={{
-      keyboardHidesTabBar: true,
-      activeTintColor: '#000',
-      inactiveTintColor: '#aaa',
-      showLabel: true,
-      labelStyle: {
-        fontSize: 14,
-        alignSelf: 'center',
-        marginBottom: 10,
-      },
-      style: {
-        height: 70,
-        alignContent: 'center',
-      }
-    }}
-  >
+const CameraIcon = (props) => (
+  <Icon {...props} name='camera-outline' />
+);
+
+const DownloadIcon = (props) => (
+  <Icon {...props} name='download-outline' />
+);
+
+const useBottomNavigationState = (initialState = 0) => {
+  const [selectedIndex, setSelectedIndex] = React.useState(initialState);
+  return { selectedIndex, onSelect: setSelectedIndex };
+};
+
+const BottomTabBar = ({ navigation, state }) => (
+  <BottomNavigation
+    selectedIndex={state.index}
+    onSelect={index => navigation.navigate(state.routeNames[index])}>
+    <BottomNavigationTab title='SEARCH' icon={SearchIcon} />
+    <BottomNavigationTab title='SCANNER' icon={CameraIcon} />
+    <BottomNavigationTab title='BOOKSHELF' icon={DownloadIcon} />
+  </BottomNavigation>
+)
+
+const bottomBookShelfNavigator = () => (
+  <Tab.Navigator tabBar={props => <BottomTabBar {...props} />}>
     <Tab.Screen name="Search" component={SearchScreen} options={{ title: 'Search Online' }} />
     <Tab.Screen name="Scanner" component={ScannerScreen} options={{ title: 'Scan ISBN' }} />
     <Tab.Screen name="BookShelf" component={BookShelfScreen} options={{ title: 'BookShelf' }} />

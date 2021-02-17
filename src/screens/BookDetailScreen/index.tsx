@@ -1,10 +1,15 @@
 import React from 'react';
-import { Image, ImageSourcePropType, ListRenderItemInfo, ScrollView, StyleSheet } from 'react-native';
-import { Button, Divider, List, StyleService, Text, useStyleSheet } from '@ui-kitten/components';
+import { Image, ScrollView, SafeAreaView } from 'react-native';
+import { Divider, StyleService, Text, useStyleSheet, TopNavigation, TopNavigationAction, Icon } from '@ui-kitten/components';
 import { DetailsList } from './extra/details-list.component';
 import { Book, BookDetails } from './extra/data';
 
-export default ({ route }): React.ReactElement => {
+const BackIcon = (props) => (
+  <Icon {...props} name='arrow-back' />
+)
+
+
+export default ({ route, navigation }): React.ReactElement => {
   const { book } = route.params;
 
   const bookdata: Book = new Book(book.md5,
@@ -28,28 +33,40 @@ export default ({ route }): React.ReactElement => {
   const imageBaseUrl = 'http://library.lol'
   const styles = useStyleSheet(themedStyles);
 
+  const navigateBack = () => {
+    navigation.goBack();
+  };
+
+  const BackAction = () => (
+    <TopNavigationAction icon={BackIcon} onPress={navigateBack} />
+  )
+
   return (
-    <ScrollView
-      style={styles.container}
-      contentContainerStyle={styles.contentContainer}
-      showsVerticalScrollIndicator={false}>
-      <Image source={{ uri: `${imageBaseUrl}${bookdata.thumbnail}`}} style={styles.primaryImage} />
-      <Text
-        style={styles.titleLabel}
-        category='h6'>
-        {bookdata.title}
-      </Text>
-      <Text
-        style={styles.subtitleLabel}
-        category='p2'>
-        {bookdata.author}
-      </Text>
+    <SafeAreaView style={{ flex: 1 }}>
+      <TopNavigation title='Book Information' alignment='center' accessoryLeft={BackAction} />
       <Divider />
-      <DetailsList
-        style={styles.detailsList}
-        data={bookdata.details}
-      />
-    </ScrollView>
+      <ScrollView
+        style={styles.container}
+        contentContainerStyle={styles.contentContainer}
+        showsVerticalScrollIndicator={false}>
+        <Image source={{ uri: `${imageBaseUrl}${bookdata.thumbnail}`}} style={styles.primaryImage} />
+        <Text
+          style={styles.titleLabel}
+          category='h6'>
+          {bookdata.title}
+        </Text>
+        <Text
+          style={styles.subtitleLabel}
+          category='p2'>
+          {bookdata.author}
+        </Text>
+        <Divider />
+        <DetailsList
+          style={styles.detailsList}
+          data={bookdata.details}
+        />
+      </ScrollView>
+    </SafeAreaView>
   )
 }
 
