@@ -1,5 +1,3 @@
-import { ProductDetails } from "src/screens/product-details-2/extra/data";
-
 export class Book {
 
   constructor(readonly md5: string,

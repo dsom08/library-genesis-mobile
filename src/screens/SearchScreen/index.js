@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { 
-  Text, 
-  View, 
   FlatList,
   ActivityIndicator
 } from 'react-native';
+import { Text, Layout, Divider } from '@ui-kitten/components';
 
 import SearchFilterDropdown from '../../components/SearchFilterDropdown';
 import SearchBar from '../../components/SearchBar';
@@ -81,12 +80,13 @@ const SearchScreen = (props) => {
   return (
     <>
       <SearchBar searchBook={searchBook} scannedISBN={scannedISBN} />
-      <View style={styles.searchFilter}>
+      <Divider/>
+      <Layout style={styles.searchFilter}>
         {resultText.length > 0 &&
           <Text style={styles.resultText}>{resultText}</Text>
         }
         <SearchFilterDropdown onSortmodeChange={onSortmodeChange} />
-      </View>
+      </Layout>
       <FlatList
         style={styles.bookList}
         data={currentBooks}

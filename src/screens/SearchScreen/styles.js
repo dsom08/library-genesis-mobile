@@ -6,15 +6,12 @@ const styles = StyleSheet.create({
   },
   searchFilter: {
     flexDirection: 'row',
-    justifyContent: 'flex-end',
-    backgroundColor: '#e4e4e4',
+    justifyContent: 'space-between',
+    padding: 10,
   },
   resultText: {
     alignSelf: 'center',
     paddingHorizontal: 10,
-    fontFamily: 'Roboto-Light',
-    fontSize: 18,
-    backgroundColor: '#e4e4e4',
   },
   loading: {
     position: 'absolute',
