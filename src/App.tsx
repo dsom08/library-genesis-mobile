@@ -21,7 +21,7 @@ const App: () => React.ReactNode = () => {
       <IconRegistry icons={EvaIconsPack} />
       <ApplicationProvider
         {...eva}
-        theme={{ ...eva.light, ...theme }}
+        theme={{ ...eva.dark, ...theme }}
       >
         <NavigationContainer>
           <StatusBar barStyle="dark-content" />
