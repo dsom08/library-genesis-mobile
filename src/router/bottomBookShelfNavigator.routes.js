@@ -29,9 +29,9 @@ const BottomTabBar = ({ navigation, state }) => (
   <BottomNavigation
     selectedIndex={state.index}
     onSelect={index => navigation.navigate(state.routeNames[index])}>
-    <BottomNavigationTab title='SEARCH' icon={SearchIcon} />
-    <BottomNavigationTab title='SCANNER' icon={CameraIcon} />
-    <BottomNavigationTab title='BOOKSHELF' icon={DownloadIcon} />
+    <BottomNavigationTab title='Search' icon={SearchIcon} />
+    <BottomNavigationTab title='Scan ISBN' icon={CameraIcon} />
+    <BottomNavigationTab title='Downloads' icon={DownloadIcon} />
   </BottomNavigation>
 )
 
