@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
+import { Layout, Text } from '@ui-kitten/components';
 import { Permissions } from 'react-native-unimodules';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 
@@ -29,15 +30,13 @@ const BarcodeScanner = ({ navigation }) => {
   return (
     <>
       {cameraPermission
-        ? <View style={styles.container}>
-            <View style={{ flex: 1 }}>
+        ? <Layout style={styles.container}>
               <BarCodeScanner
                 onBarCodeScanned={onBarCodeRead}
                 style={StyleSheet.absoluteFill}
               />
-              <Text style={styles.scanScreenMessage}>Focus the ISBN barcode to scan.</Text>
-            </View>
-          </View>
+              <Text style={styles.scanScreenMessage} category='h6'>Focus on the ISBN barcode</Text>
+          </Layout>
         : <Text>Camera Permission required...</Text>
       }
     </>
