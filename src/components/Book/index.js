@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { 
   View,
-  Text, 
   Image, 
   TouchableOpacity,
   TouchableWithoutFeedback,
@@ -9,6 +8,7 @@ import {
   PermissionsAndroid,
   Platform,
 } from 'react-native';
+import { Layout, Text, Card, Icon, Spinner, Button } from '@ui-kitten/components';
 import { useNavigation } from '@react-navigation/native';
 import RNBackgroundDownloader from 'react-native-background-downloader';
 import RNFetchBlob from 'rn-fetch-blob';
@@ -19,6 +19,24 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import MIMETypeMapper from '../../libs/MIMETypeMapper';
 
 import styles from './styles';
+
+const DownloadIcon = (props) => (
+  <Icon {...props} name='download-outline'/>
+)
+
+const BookOpenIcon = (props) => (
+  <Icon {...props} name='book-open-outline'/>
+)
+
+const DeleteIcon = (props) => (
+  <Icon {...props} name='trash-2-outline'/>
+)
+
+const LoadingIndicator = (props) => (
+  <View style={[props.style, styles.indicator]}>
+    <Spinner size='small' />
+  </View>
+)
 
 const Book = ({ book, sort }) => {
   const [isDownloading, setIsDownloading] = useState(false);
@@ -124,19 +142,47 @@ const Book = ({ book, sort }) => {
   }
 
   return (
-    <TouchableWithoutFeedback onPress={onPress}>
-      <View style={styles.container} >
-        <View style={styles.imageContainer}>
-          <Image source={{ uri: `${imageBaseUrl}${book.thumbnail}` }} style={styles.thumbnail}/>
-        </View>
-        <View style={styles.contentsContainer}>
-          <Text 
-            style={styles.title}
+    <Card style={styles.container} onPress={onPress}>
+      <Layout style={styles.contentsContainer}>
+        <Image source={{ uri: `${imageBaseUrl}${book.thumbnail}` }} style={styles.thumbnail}/>
+        <Layout style={styles.details}>
+          <Text
             numberOfLines={2}
+            category='h6'
           >{book.title}</Text>
-          <Text style={styles.author}>{book.author}</Text>
-          <Text style={styles.year}>{book[(sort === 'filesize' ? 'size' : sort)]}</Text>
+          <Text category='p2'>{book.author}</Text>
+          <Text style={styles.sortDetail} category='label'>{book[(sort === 'filesize' ? 'size' : sort)]}</Text>
           {(() => {
+            if (isStored) {
+              return <>
+                      <Button
+                        style={styles.deleteButton}
+                        status='danger'
+                        accessoryLeft={DeleteIcon}
+                        onPress={deleteBook}></Button>
+                      <Button
+                        style={styles.button}
+                        status='success'
+                        accessoryLeft={BookOpenIcon}
+                        onPress={openBook}></Button>
+                    </>
+            } else if (isDownloading) {
+              return <Button
+                        style={styles.button}
+                        appearance='ghost'
+                        accessoryLeft={LoadingIndicator}
+                        disabled={true}
+                        ></Button>
+            } else {
+              return <Button 
+                        style={styles.button} 
+                        appearance='primary'
+                        accessoryLeft={DownloadIcon}
+                        onPress={onPressDownloadButton}>
+                        {book.extension}</Button> 
+            }
+          })()}
+          {/* {(() => {
             if (isStored) {
               return <>
                         <TouchableOpacity
@@ -164,10 +210,10 @@ const Book = ({ book, sort }) => {
                       <Text style={styles.buttonText}> {book.extension.toUpperCase()}</Text>
                     </TouchableOpacity>
             }
-          })()}
-        </View>
-      </View>
-    </TouchableWithoutFeedback>
+          })()} */}
+        </Layout>
+      </Layout>
+    </Card>
   )
 }
 

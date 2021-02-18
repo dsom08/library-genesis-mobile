@@ -1,0 +1,17 @@
+{
+  "strict": {
+    "text-font-family": "Roboto-Regular"
+  },
+  "components": {
+    "Card": {
+      "appearances": {
+        "outline": {
+          "mapping": {
+            "bodyPaddingHorizontal": -16,
+            "bodyPaddingVertical": -16
+          }
+        }
+      }
+    }
+  }
+}

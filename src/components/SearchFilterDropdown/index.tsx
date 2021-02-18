@@ -33,8 +33,8 @@ const SearchFilterDropdown = ({ onSortmodeChange }) => {
     onSortmodeChange(selectedMode.sortby, selectedMode.order);
   }
 
-  const renderPlacementItem = (item: SortMode) => (
-    <SelectItem title={item.label}/>
+  const renderPlacementItem = (item: SortMode, index: number) => (
+    <SelectItem title={item.label} key={index}/>
   )
 
   return (
