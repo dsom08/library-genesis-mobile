@@ -17,6 +17,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import MIMETypeMapper from '../../libs/MIMETypeMapper';
+import { IMAGE_BASE_URL, DOWNLOAD_LINK_BASE_URL } from '@env';
 
 import styles from './styles';
 
@@ -58,9 +59,6 @@ const Book = ({ book, sort }) => {
                 })
   }, [])
 
-  const imageBaseUrl = 'http://library.lol'
-  const downloadLinkBaseUrl = 'https://azjuojggh5.execute-api.ap-northeast-2.amazonaws.com/dev/link?md5='
-
   const storeBook = async (book) => {
     try {
       const jsonValue = JSON.stringify(book)
@@ -94,7 +92,7 @@ const Book = ({ book, sort }) => {
   const downloadBook = async () => {
     try {
       setIsDownloading(true)
-      const response = await fetch(`${downloadLinkBaseUrl}${book.md5}`)
+      const response = await fetch(`${DOWNLOAD_LINK_BASE_URL}${book.md5}`)
       const { link } = await response.json()
       console.log(link)
       console.log(RNFetchBlob.fs.dirs.DownloadDir)
@@ -144,7 +142,7 @@ const Book = ({ book, sort }) => {
   return (
     <Card style={styles.container} onPress={onPress}>
       <Layout style={styles.contentsContainer}>
-        <Image source={{ uri: `${imageBaseUrl}${book.thumbnail}` }} style={styles.thumbnail}/>
+        <Image source={{ uri: `${IMAGE_BASE_URL}${book.thumbnail}` }} style={styles.thumbnail}/>
         <Layout style={styles.details}>
           <Text
             numberOfLines={2}

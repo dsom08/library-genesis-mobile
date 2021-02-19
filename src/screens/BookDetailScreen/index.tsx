@@ -3,6 +3,7 @@ import { Image, ScrollView, SafeAreaView, Share } from 'react-native';
 import { Divider, StyleService, Text, useStyleSheet, TopNavigation, TopNavigationAction, Icon } from '@ui-kitten/components';
 import { DetailsList } from './extra/details-list.component';
 import { Book, BookDetails } from './extra/data';
+import { DOWNLOAD_LINK_BASE_URL, IMAGE_BASE_URL } from '@env';
 
 const BackIcon = (props) => (
   <Icon {...props} name='arrow-back' />
@@ -11,8 +12,6 @@ const BackIcon = (props) => (
 const ShareIcon = (props) => (
   <Icon {...props} name='share' />
 )
-
-const downloadLinkBaseUrl = 'https://azjuojggh5.execute-api.ap-northeast-2.amazonaws.com/dev/link?md5='
 
 export default ({ route, navigation }): React.ReactElement => {
   const { book } = route.params;
@@ -35,7 +34,6 @@ export default ({ route, navigation }): React.ReactElement => {
                                     BookDetails.extensionDetail(book.extension)
                                   ])
 
-  const imageBaseUrl = 'http://library.lol'
   const styles = useStyleSheet(themedStyles);
 
   const navigateBack = () => {
@@ -52,7 +50,7 @@ export default ({ route, navigation }): React.ReactElement => {
 
   const onShare = async () => {
     try {
-      const response = await fetch(`${downloadLinkBaseUrl}${book.md5}`)
+      const response = await fetch(`${DOWNLOAD_LINK_BASE_URL}${book.md5}`)
       const { link } = await response.json()
 
       const result = await Share.share({
@@ -83,7 +81,7 @@ export default ({ route, navigation }): React.ReactElement => {
         style={styles.container}
         contentContainerStyle={styles.contentContainer}
         showsVerticalScrollIndicator={false}>
-        <Image source={{ uri: `${imageBaseUrl}${bookdata.thumbnail}`}} style={styles.primaryImage} />
+        <Image source={{ uri: `${IMAGE_BASE_URL}${bookdata.thumbnail}`}} style={styles.primaryImage} />
         <Text
           style={styles.titleLabel}
           category='h6'>

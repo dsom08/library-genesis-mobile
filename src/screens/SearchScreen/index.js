@@ -8,6 +8,7 @@ import { heightPercentageToDP as hp } from 'react-native-responsive-screen'
 import SearchFilterDropdown from '../../components/SearchFilterDropdown';
 import SearchBar from '../../components/SearchBar';
 import Book from '../../components/Book';
+import { SEARCH_BASE_URL } from '@env'
 
 import styles from './styles';
 
@@ -31,8 +32,6 @@ const SearchScreen = (props) => {
   const [currentPage, setCurrentPage] = useState(0);
   const [foundBookCount, setFoundBookCount] = useState(0);
 
-  const searchBaseUrl = 'https://azjuojggh5.execute-api.ap-northeast-2.amazonaws.com/dev/search?req=';
-
   useEffect(() => {
     if (route.params !== undefined) {
       setScannedISBN(route.params.scannedISBN)
@@ -47,7 +46,7 @@ const SearchScreen = (props) => {
   const searchBook = async (searchValue) => {
     try {
       setIsLoading(true);
-      const response = await fetch(`${searchBaseUrl}${searchValue}&sort=${sort}&sortmode=${sortmode}`)
+      const response = await fetch(`${SEARCH_BASE_URL}${searchValue}&sort=${sort}&sortmode=${sortmode}`)
       const { books, summary } = await response.json()
       setCurrentBooks(books)
       setSearchValue(searchValue)
@@ -65,7 +64,7 @@ const SearchScreen = (props) => {
     try {
       if (foundBookCount <= currentPage * 25) return; // already reached the last page
       setIsFetchingNextPage(true)
-      const response = await fetch(`${searchBaseUrl}${searchValue}&sort=${sort}&sortmode=${sortmode}&page=${currentPage + 1}`)
+      const response = await fetch(`${SEARCH_BASE_URL}${searchValue}&sort=${sort}&sortmode=${sortmode}&page=${currentPage + 1}`)
       const { books, summary } = await response.json()
       if (books.length > 0) {
         setCurrentBooks([...currentBooks, ...books])
