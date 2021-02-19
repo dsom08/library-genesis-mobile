@@ -10,9 +10,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto-Medium',
     fontSize: 40,
   },
-  bookList: {
-    backgroundColor: '#E4E4E4',
-  }
 })
 
 export default styles;

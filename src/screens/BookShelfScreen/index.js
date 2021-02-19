@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
-import { View, Text, FlatList } from 'react-native';
+import { List } from '@ui-kitten/components';
+import { heightPercentageToDP as hp } from 'react-native-responsive-screen'
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -28,12 +29,32 @@ const BookShelfScreen = ({ navigation }) => {
     }
   }
 
+  const renderItem = useCallback(
+    ({item}) => <Book book={item} navigation={navigation}></Book>,
+    []
+  );
+
+  const keyExtractor = useCallback(({md5}) => md5, []);
+
+  const ITEM_HEIGHT = hp(20)
+
+  const getItemLayout = useCallback(
+    (data, index) => ({
+      length: ITEM_HEIGHT,
+      offset: ITEM_HEIGHT * index,
+      index,
+    }),
+    []
+  );
+
   return (
-    <FlatList
-      style={styles.bookList}
+    <List
       data={books}
-      renderItem={({item}) => <Book book={item} navigation={navigation} />}
-      keyExtractor={({md5}) => md5}
+      renderItem={renderItem}
+      keyExtractor={keyExtractor}
+      maxToRenderPerBatch={7}
+      windowSize={11}
+      getItemLayout={getItemLayout}
     />
   )
 }
