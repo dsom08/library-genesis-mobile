@@ -1,9 +1,6 @@
 import { StyleSheet, Dimensions } from 'react-native';
 
 const styles = StyleSheet.create({
-  bookList: {
-    backgroundColor: '#e4e4e4',
-  },
   searchFilter: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
@@ -13,18 +10,17 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     paddingHorizontal: 10,
   },
-  loading: {
-    position: 'absolute',
-    alignSelf: 'center',
-    width: Dimensions.get('window').width,
-    height: Dimensions.get('window').height - 154,
-    top: 60,
-    backgroundColor: 'rgba(0,0,0,.5)',
-  },
   fetchNextPage: {
-    backgroundColor: 'rgba(0,0,0,0)',
+    backgroundColor: 'rgba(0,255,0,0.1)',
     paddingVertical: 10,
-  }
+  },
+  backdrop: {
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  indicator: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 })
 
 export default styles;

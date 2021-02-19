@@ -1,15 +1,21 @@
-import React, { useState, useEffect } from 'react'
-import { 
-  FlatList,
-  ActivityIndicator
+import React, { useState, useEffect, useCallback } from 'react'
+import {
+  View
 } from 'react-native';
-import { Text, Layout, Divider } from '@ui-kitten/components';
+import { Text, Layout, Divider, List, Modal, Spinner, Button, Card } from '@ui-kitten/components';
+import { heightPercentageToDP as hp } from 'react-native-responsive-screen'
 
 import SearchFilterDropdown from '../../components/SearchFilterDropdown';
 import SearchBar from '../../components/SearchBar';
 import Book from '../../components/Book';
 
 import styles from './styles';
+
+const LoadingIndicator = (props) => (
+  <View style={[props.style, styles.indicator]}>
+    <Spinner size='giant' />
+  </View>
+)
 
 const SearchScreen = (props) => {
   const { route, navigation } = props;
@@ -77,6 +83,24 @@ const SearchScreen = (props) => {
     setSortmode(sortmode)
   }
 
+  const renderItem = useCallback(
+    ({item}) => <Book book={item} sort={sort} navigation={navigation}></Book>,
+    []
+  );
+
+  const keyExtractor = useCallback(({md5}) => md5, []);
+
+  const ITEM_HEIGHT = hp(20)
+
+  const getItemLayout = useCallback(
+    (data, index) => ({
+      length: ITEM_HEIGHT,
+      offset: ITEM_HEIGHT * index,
+      index,
+    }),
+    []
+  );
+
   return (
     <>
       <SearchBar searchBook={searchBook} scannedISBN={scannedISBN} />
@@ -87,15 +111,23 @@ const SearchScreen = (props) => {
         }
         <SearchFilterDropdown onSortmodeChange={onSortmodeChange} />
       </Layout>
-      <FlatList
-        style={styles.bookList}
+      <List
         data={currentBooks}
-        renderItem={({item}) => <Book book={item} sort={sort} navigation={navigation} />}
-        keyExtractor={({md5}) => md5}
+        renderItem={renderItem}
+        keyExtractor={keyExtractor}
+        maxToRenderPerBatch={7}
+        windowSize={11}
+        getItemLayout={getItemLayout}
         onEndReached={fetchNextPage}
       />
-      { isFetchingNextPage && <ActivityIndicator style={styles.fetchNextPage} size={30} color="#444" /> }
-      { isLoading && <ActivityIndicator style={styles.loading} size={100} color="#DDD" /> }
+      <Modal
+        visible={isLoading}
+        backdropStyle={styles.backdrop}>
+        <Button
+          size='giant'
+          appearance='ghost'
+          accessoryLeft={LoadingIndicator}></Button>
+      </Modal>
     </>
   )
 }
