@@ -113,7 +113,7 @@ const SearchScreen = (props) => {
       <Divider/>
       <List
         data={currentBooks}
-        renderItem={renderItem}
+        renderItem={({item}) => <Book book={item} sort={sort} navigation={navigation}></Book>}
         keyExtractor={keyExtractor}
         maxToRenderPerBatch={7}
         windowSize={11}
