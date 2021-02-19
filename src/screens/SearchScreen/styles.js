@@ -4,7 +4,7 @@ const styles = StyleSheet.create({
   searchFilter: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
-    padding: 10,
+    padding: 5,
   },
   resultText: {
     alignSelf: 'center',

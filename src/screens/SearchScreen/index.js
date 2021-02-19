@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react'
 import {
   View
 } from 'react-native';
-import { Text, Layout, Divider, List, Modal, Spinner, Button, Card } from '@ui-kitten/components';
+import { Text, Layout, Divider, List, Modal, Spinner, Button } from '@ui-kitten/components';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen'
 
 import SearchFilterDropdown from '../../components/SearchFilterDropdown';
@@ -111,6 +111,7 @@ const SearchScreen = (props) => {
         }
         <SearchFilterDropdown onSortmodeChange={onSortmodeChange} />
       </Layout>
+      <Divider/>
       <List
         data={currentBooks}
         renderItem={renderItem}
@@ -120,14 +121,14 @@ const SearchScreen = (props) => {
         getItemLayout={getItemLayout}
         onEndReached={fetchNextPage}
       />
-      <Modal
-        visible={isLoading}
+      { isLoading && <Modal
+        visible={true}
         backdropStyle={styles.backdrop}>
         <Button
           size='giant'
           appearance='ghost'
           accessoryLeft={LoadingIndicator}></Button>
-      </Modal>
+      </Modal> }
     </>
   )
 }

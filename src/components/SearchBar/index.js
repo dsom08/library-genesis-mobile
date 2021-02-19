@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { View, TextInput, TouchableWithoutFeedback, StyleSheet } from 'react-native';
+import { TouchableWithoutFeedback, StyleSheet } from 'react-native';
 import { Layout, Button, Icon, Input } from '@ui-kitten/components';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import { ThemeContext } from '../../theme-context';
 
 const SearchBar = (props) => {
   const { searchBook, scannedISBN } = props
+  const themeContext = React.useContext(ThemeContext);
 
   const [searchValue, setSearchValue] = useState('');
 
@@ -28,8 +29,20 @@ const SearchBar = (props) => {
     <Icon {...props} name='search-outline' />
   );
 
+  const DarkModeIcon = (props) => (
+    <Icon {...props} name='moon' />
+  )
+
+  const LightModeIcon = (props) => (
+    <Icon {...props} name='sun-outline' />
+  )
+
   return (
     <Layout style={styles.container} level='1'>
+      { themeContext.theme === 'light' ?
+        <Button appearance='ghost' size='large' accessoryLeft={DarkModeIcon} onPress={themeContext.darkTheme} /> :
+        <Button appearance='ghost' size='large' accessoryLeft={LightModeIcon} onPress={themeContext.lightTheme} />
+      }
       <Input
         style={styles.searchInput}
         value={searchValue}
@@ -71,12 +84,12 @@ const SearchBar = (props) => {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     alignItems: 'center',
     height: hp(8),
   },
   searchInput: {
-    width: wp(80),
+    flex: 1,
   },
   button: {
     marginHorizontal: wp(1),
