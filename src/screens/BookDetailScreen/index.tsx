@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image, ScrollView, SafeAreaView } from 'react-native';
+import { Image, ScrollView, SafeAreaView, Share } from 'react-native';
 import { Divider, StyleService, Text, useStyleSheet, TopNavigation, TopNavigationAction, Icon } from '@ui-kitten/components';
 import { DetailsList } from './extra/details-list.component';
 import { Book, BookDetails } from './extra/data';
@@ -8,6 +8,11 @@ const BackIcon = (props) => (
   <Icon {...props} name='arrow-back' />
 )
 
+const ShareIcon = (props) => (
+  <Icon {...props} name='share' />
+)
+
+const downloadLinkBaseUrl = 'https://azjuojggh5.execute-api.ap-northeast-2.amazonaws.com/dev/link?md5='
 
 export default ({ route, navigation }): React.ReactElement => {
   const { book } = route.params;
@@ -41,9 +46,38 @@ export default ({ route, navigation }): React.ReactElement => {
     <TopNavigationAction icon={BackIcon} onPress={navigateBack} />
   )
 
+  const ShareAction = () => (
+    <TopNavigationAction icon={ShareIcon} onPress={onShare} />
+  )
+
+  const onShare = async () => {
+    try {
+      const response = await fetch(`${downloadLinkBaseUrl}${book.md5}`)
+      const { link } = await response.json()
+
+      const result = await Share.share({
+        title: `${bookdata.title}`,
+        message:
+          link,
+        url: link
+      });
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+        } else {
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+      }
+    } catch (error) {
+      alert(error.message);
+    }
+  };
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <TopNavigation title='Book Information' alignment='center' accessoryLeft={BackAction} />
+      <TopNavigation title='Book Information' alignment='center' accessoryLeft={BackAction} accessoryRight={ShareAction} />
       <Divider />
       <ScrollView
         style={styles.container}
