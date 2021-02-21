@@ -1,6 +1,8 @@
 import React from 'react';
-import { Image, ScrollView, SafeAreaView, Share } from 'react-native';
-import { Divider, StyleService, Text, useStyleSheet, TopNavigation, TopNavigationAction, Icon } from '@ui-kitten/components';
+import { Image, ScrollView, SafeAreaView, Share, View } from 'react-native';
+import { Divider, StyleService, Text, useStyleSheet,
+        TopNavigation, TopNavigationAction, Icon,
+        Spinner } from '@ui-kitten/components';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen'
 
 import { DetailsList } from './extra/details-list.component';
@@ -15,8 +17,14 @@ const ShareIcon = (props) => (
   <Icon {...props} name='share' />
 )
 
+const LoadingSpinner = (props) => (
+  <Spinner size='medium' status='basic' />
+)
+
 export default ({ route, navigation }): React.ReactElement => {
   const { book } = route.params;
+
+  const [isSharing, setIsSharing] = React.useState(false);
 
   const bookdata: Book = new Book(book.md5,
                                   book.thumbnail,
@@ -52,6 +60,7 @@ export default ({ route, navigation }): React.ReactElement => {
 
   const onShare = async () => {
     try {
+      setIsSharing(true)
       const response = await fetch(`${DOWNLOAD_LINK_BASE_URL}${book.md5}`)
       const { link } = await response.json()
 
@@ -72,12 +81,14 @@ export default ({ route, navigation }): React.ReactElement => {
       }
     } catch (error) {
       alert(error.message);
+    } finally {
+      setIsSharing(false);
     }
   };
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <TopNavigation title='Book Information' alignment='center' accessoryLeft={BackAction} accessoryRight={ShareAction} />
+      <TopNavigation title='Book Information' alignment='center' accessoryLeft={BackAction} accessoryRight={isSharing ? LoadingSpinner : ShareAction} />
       <Divider />
       <ScrollView
         style={styles.container}
