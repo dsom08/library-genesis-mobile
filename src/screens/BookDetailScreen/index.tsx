@@ -1,6 +1,8 @@
 import React from 'react';
 import { Image, ScrollView, SafeAreaView, Share } from 'react-native';
 import { Divider, StyleService, Text, useStyleSheet, TopNavigation, TopNavigationAction, Icon } from '@ui-kitten/components';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen'
+
 import { DetailsList } from './extra/details-list.component';
 import { Book, BookDetails } from './extra/data';
 import { DOWNLOAD_LINK_BASE_URL, IMAGE_BASE_URL } from '@env';
@@ -97,6 +99,15 @@ export default ({ route, navigation }): React.ReactElement => {
           style={styles.detailsList}
           data={bookdata.details}
         />
+        <Divider />
+        <Text style={styles.infoLabel} category='label' appearance='hint'>file size</Text>
+        <Text style={styles.infoValue} category='p1'>{book.size}</Text>
+        <Text style={styles.infoLabel} category='label' appearance='hint'>pages</Text>
+        <Text style={styles.infoValue} category='p1'>{book.pages}</Text>
+        <Text style={styles.infoLabel} category='label' appearance='hint'>publisher</Text>
+        <Text style={styles.infoValue} category='p1'>{book.publisher}</Text>
+        <Text style={styles.infoLabel} category='label' appearance='hint'>edition</Text>
+        <Text style={styles.infoValue} category='p1'>{book.edition}</Text>
       </ScrollView>
     </SafeAreaView>
   )
@@ -108,26 +119,33 @@ const themedStyles = StyleService.create({
     backgroundColor: 'background-basic-color-2',
   },
   contentContainer: {
-    paddingVertical: 24,
+    paddingVertical: hp(3),
   },
   primaryImage: {
     alignSelf: 'center',
-    width: 256,
-    height: 360,
+    width: wp(60),
+    height: wp(84),
     borderRadius: 8,
   },
   titleLabel: {
     alignSelf: 'center',
     textAlign: 'center',
-    marginHorizontal: 64,
-    marginTop: 24,
+    marginHorizontal: wp(10),
+    marginTop: hp(3),
   },
   subtitleLabel: {
     alignSelf: 'center',
-    marginVertical: 8,
+    marginBottom: hp(2),
   },
   detailsList: {
     alignSelf: 'center',
-    marginVertical: 24,
+    marginVertical: hp(3),
   },
+  infoLabel: {
+    marginTop: hp(1.4),
+    alignSelf: 'center',
+  },
+  infoValue: {
+    alignSelf: 'center',
+  }
 });
